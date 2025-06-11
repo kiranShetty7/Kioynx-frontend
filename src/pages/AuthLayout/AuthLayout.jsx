@@ -8,8 +8,10 @@ import ForgotPassword from "../../components/ForgotPassword/ForgotPassword";
 import ResetPassword from "../../components/ResetPassword/ResetPassword";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
-import classes from "./AuthLayout.module.css";
+import * as classes from "./AuthLayout.module.css";
 import KionyxLogo from "../../assets/kionyx_logo.png";
+
+console.log('CSS Module classes:', classes);
 
 function CustomTabPanel({ children, value, index, ...other }) {
   return (
@@ -29,6 +31,7 @@ const AuthLayout = () => {
   const [value, setValue] = React.useState(0);
   const [showForgotPassword, setShowForgotPassword] = React.useState(false);
   const [isResetMode, setIsResetMode] = React.useState(false);
+  console.log(classes, "classes");
 
   React.useEffect(() => {
     const path = window.location.pathname;

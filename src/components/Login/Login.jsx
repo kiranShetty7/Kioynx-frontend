@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import classes from "./Login.module.css";
+import * as classes from "./Login.module.css";
 import { loginOperation } from "../../services/apiHandler";
 
 const Login = () => {

@@ -6,7 +6,7 @@ import {
   SIGN_UP,
   FORGOT_PASSWORD,
   RESET_PASSWORD,
-} from "./constants";
+} from "./constants.js";
 import axios from "axios";
 
 const instance = axios.create({});

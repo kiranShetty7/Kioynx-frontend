@@ -2,7 +2,7 @@ import * as React from "react";
 import { useForm } from "react-hook-form";
 import { Button, TextField, CircularProgress, Typography } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import classes from "./ForgotPassword.module.css";
+import * as classes from "./ForgotPassword.module.css";
 import { forgotPasswordOperation } from "../../services/apiHandler";
 
 const ForgotPassword = ({ onBack }) => {

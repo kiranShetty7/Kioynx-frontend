@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import classes from "./ResetPassword.module.css";
+import * as classes from "./ResetPassword.module.css";
 import { resetPasswordOperation } from "../../services/apiHandler";
 
 const ResetPassword = () => {
