@@ -11,8 +11,6 @@ import CardContent from "@mui/material/CardContent";
 import * as classes from "./AuthLayout.module.css";
 import KionyxLogo from "../../assets/kionyx_logo.png";
 
-console.log('CSS Module classes:', classes);
-
 function CustomTabPanel({ children, value, index, ...other }) {
   return (
     <div
@@ -27,7 +25,7 @@ function CustomTabPanel({ children, value, index, ...other }) {
   );
 }
 
-const AuthLayout = () => {
+const AuthLayout = ({ onLoginSuccess }) => {
   const [value, setValue] = React.useState(0);
   const [showForgotPassword, setShowForgotPassword] = React.useState(false);
   const [isResetMode, setIsResetMode] = React.useState(false);
@@ -35,6 +33,7 @@ const AuthLayout = () => {
 
   React.useEffect(() => {
     const path = window.location.pathname;
+    console.log(path);
     if (path.startsWith("/reset-password/") || path.includes("/token/")) {
       setIsResetMode(true);
     }
@@ -55,7 +54,7 @@ const AuthLayout = () => {
           <CardContent>
             <Box sx={{ width: "100%" }}>
               {isResetMode ? (
-                <ResetPassword />
+                <ResetPassword onBack={() => setIsResetMode(false)} />
               ) : showForgotPassword ? (
                 <ForgotPassword onBack={onBack} />
               ) : (
@@ -77,7 +76,7 @@ const AuthLayout = () => {
                     />
                   </Tabs>
                   <CustomTabPanel value={value} index={0}>
-                    <Login />
+                    <Login onLoginSuccess={onLoginSuccess} />
                     <p
                       style={{
                         cursor: "pointer",

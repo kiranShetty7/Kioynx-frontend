@@ -16,7 +16,7 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import * as classes from "./Login.module.css";
 import { loginOperation } from "../../services/apiHandler";
 
-const Login = () => {
+const Login = ({ onLoginSuccess }) => {
   const {
     register,
     handleSubmit,
@@ -43,6 +43,7 @@ const Login = () => {
         const { token, name, email, userId } = response.data.data;
         localStorage.setItem("token", token);
         localStorage.setItem("user", JSON.stringify({ name, email, userId }));
+        onLoginSuccess();
         setSuccess("Login successful!");
       } else {
         setError(response?.data?.message);
@@ -53,6 +54,7 @@ const Login = () => {
       if (err?.response?.status === 401) {
         setError("Unauthorized: Incorrect email or password");
       } else {
+        console.log(err);
         setError(err?.response?.data?.message || "Login failed");
       }
     } finally {

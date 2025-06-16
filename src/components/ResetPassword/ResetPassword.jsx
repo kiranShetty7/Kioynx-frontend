@@ -15,11 +15,12 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import * as classes from "./ResetPassword.module.css";
 import { resetPasswordOperation } from "../../services/apiHandler";
 
-const ResetPassword = () => {
+const ResetPassword = ({ onBack }) => {
   const {
     handleSubmit,
     register,
     watch,
+    reset,
     formState: { errors },
   } = useForm();
 
@@ -59,6 +60,12 @@ const ResetPassword = () => {
       }
 
       setSuccessMessage("Password reset successful!");
+      // Clear form fields
+      reset();
+      // Navigate back to login after 2 seconds
+      setTimeout(() => {
+        onBack();
+      }, 2000);
     } catch (error) {
       const errMsg =
         error?.response?.data?.message ||
