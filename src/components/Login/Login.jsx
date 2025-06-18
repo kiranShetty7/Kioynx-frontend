@@ -9,24 +9,24 @@ import {
   InputAdornment,
   FormControl,
   TextField,
-  Typography,
 } from "@mui/material";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import * as classes from "./Login.module.css";
 import { loginOperation } from "../../services/apiHandler";
+import { useSnackbar } from "../../context/SnackbarContext";
 
-const Login = ({ onLoginSuccess }) => {
+const Login = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
 
+  const { showSuccess, showError } = useSnackbar();
+
   const [showPassword, setShowPassword] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
-  const [error, setError] = React.useState("");
-  const [success, setSuccess] = React.useState("");
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const handleMouseDownPassword = (event) => event.preventDefault();
@@ -34,8 +34,6 @@ const Login = ({ onLoginSuccess }) => {
   const onSubmit = async (data) => {
     try {
       setLoading(true);
-      setError("");
-      setSuccess("");
       const response = await loginOperation(data);
       console.log(response?.data?.success);
 
@@ -43,19 +41,23 @@ const Login = ({ onLoginSuccess }) => {
         const { token, name, email, userId } = response.data.data;
         localStorage.setItem("token", token);
         localStorage.setItem("user", JSON.stringify({ name, email, userId }));
-        onLoginSuccess();
-        setSuccess("Login successful!");
+        
+        // Show success message
+        showSuccess("Login successful! Welcome!");
+        
+        // Call the onLoginSuccess callback
+        // onLoginSuccess();
       } else {
-        setError(response?.data?.message);
+        showError(response?.data?.message || "Login failed");
       }
 
       // You can add navigation or context update here
     } catch (err) {
       if (err?.response?.status === 401) {
-        setError("Unauthorized: Incorrect email or password");
+        showError("Unauthorized: Incorrect email or password");
       } else {
         console.log(err);
-        setError(err?.response?.data?.message || "Login failed");
+        showError(err?.response?.data?.message || "Login failed");
       }
     } finally {
       setLoading(false);
@@ -66,17 +68,6 @@ const Login = ({ onLoginSuccess }) => {
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className={classes.container}>
-          {error && (
-            <Typography color="error" variant="body2">
-              {error}
-            </Typography>
-          )}
-          {success && (
-            <Typography color="primary" variant="body2">
-              {success}
-            </Typography>
-          )}
-
           <TextField
             id="email"
             label="Email"

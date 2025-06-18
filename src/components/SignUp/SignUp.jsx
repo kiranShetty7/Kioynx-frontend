@@ -11,22 +11,20 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import * as classes from "./SignUp.module.css";
 import { signUpOperation } from "../../services/apiHandler";
+import { useSnackbar } from "../../context/SnackbarContext";
 
-const SignUp = () => {
+const SignUp = ({ onSignUpSuccess }) => {
   const {
     handleSubmit,
     register,
     formState: { errors },
   } = useForm();
 
+  const { showSuccess, showError } = useSnackbar();
+
   const [showPassword, setShowPassword] = React.useState({
     password: false,
     confirmPassword: false,
-  });
-
-  const [serverMessage, setServerMessage] = React.useState({
-    type: "",
-    text: "",
   });
 
   const handleClickShowPassword = (field) => () => {
@@ -37,14 +35,10 @@ const SignUp = () => {
   };
 
   const onSubmit = async (data) => {
-    setServerMessage({
-      type: "",
-      text: "",
-    });
     const { name, email, password, confirmPassword } = data;
 
     if (password !== confirmPassword) {
-      setServerMessage({ type: "error", text: "Passwords do not match" });
+      showError("Passwords do not match");
       return;
     }
 
@@ -57,17 +51,19 @@ const SignUp = () => {
         localStorage.setItem("email", email);
         localStorage.setItem("token", token);
         localStorage.setItem("userId", userId);
+        
+        // Show success message
+        showSuccess("Sign up successful! Welcome to Kionyx!");
+        
+        // Call the callback to switch to login tab
+        if (onSignUpSuccess) {
+          onSignUpSuccess();
+        }
       } else {
-        setServerMessage({
-          type: "error",
-          text: response?.data?.message || "Signup failed",
-        });
+        showError(response?.data?.message || "Signup failed");
       }
     } catch (error) {
-      setServerMessage({
-        type: "error",
-        text: error?.response?.data?.message || "Signup request failed",
-      });
+      showError(error?.response?.data?.message || "Signup request failed");
     }
   };
 
@@ -75,9 +71,6 @@ const SignUp = () => {
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className={classes.container}>
-          {serverMessage.text && (
-            <div className={classes.error}>{serverMessage.text}</div>
-          )}
           <TextField
             id="outlined-basic"
             label="Name"

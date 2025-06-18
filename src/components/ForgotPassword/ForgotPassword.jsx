@@ -1,9 +1,10 @@
 import * as React from "react";
 import { useForm } from "react-hook-form";
-import { Button, TextField, CircularProgress, Typography } from "@mui/material";
+import { Button, TextField, CircularProgress } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import * as classes from "./ForgotPassword.module.css";
 import { forgotPasswordOperation } from "../../services/apiHandler";
+import { useSnackbar } from "../../context/SnackbarContext";
 
 const ForgotPassword = ({ onBack }) => {
   const {
@@ -12,21 +13,19 @@ const ForgotPassword = ({ onBack }) => {
     formState: { errors },
   } = useForm();
 
+  const { showSuccess, showError } = useSnackbar();
+
   const [loading, setLoading] = React.useState(false);
-  const [successMessage, setSuccessMessage] = React.useState("");
-  const [errorMessage, setErrorMessage] = React.useState("");
 
   const onSubmit = async (data) => {
     try {
       setLoading(true);
-      setSuccessMessage("");
-      setErrorMessage("");
 
       await forgotPasswordOperation(data);
 
-      setSuccessMessage("Password reset link sent to your email.");
+      showSuccess("Password reset link sent to your email.");
     } catch (error) {
-      setErrorMessage(
+      showError(
         error?.response?.data?.message || "Failed to send reset link."
       );
     } finally {
@@ -38,21 +37,6 @@ const ForgotPassword = ({ onBack }) => {
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className={classes.container}>
-          {successMessage && (
-            <Typography
-              color="primary"
-              variant="body2"
-              sx={{ mb: 1, color: "#fff" }}
-            >
-              {successMessage}
-            </Typography>
-          )}
-          {errorMessage && (
-            <Typography color="error" variant="body2" sx={{ mb: 1 }}>
-              {errorMessage}
-            </Typography>
-          )}
-
           <TextField
             id="email"
             label="Email"

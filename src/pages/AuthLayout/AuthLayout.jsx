@@ -46,6 +46,11 @@ const AuthLayout = ({ onLoginSuccess }) => {
 
   const onBack = () => setShowForgotPassword(false);
 
+  const handleSignUpSuccess = () => {
+    // Switch to login tab after successful signup
+    setValue(0);
+  };
+
   return (
     <div className={classes.background}>
       <div className={classes.content}>
@@ -89,7 +94,7 @@ const AuthLayout = ({ onLoginSuccess }) => {
                     </p>
                   </CustomTabPanel>
                   <CustomTabPanel value={value} index={1}>
-                    <SignUp />
+                    <SignUp onSignUpSuccess={handleSignUpSuccess} />
                   </CustomTabPanel>
                 </>
               )}

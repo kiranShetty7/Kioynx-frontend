@@ -7,13 +7,12 @@ import {
   InputLabel,
   InputAdornment,
   FormControl,
-  Snackbar,
-  Alert,
 } from "@mui/material";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import * as classes from "./ResetPassword.module.css";
 import { resetPasswordOperation } from "../../services/apiHandler";
+import { useSnackbar } from "../../context/SnackbarContext";
 
 const ResetPassword = ({ onBack }) => {
   const {
@@ -24,13 +23,13 @@ const ResetPassword = ({ onBack }) => {
     formState: { errors },
   } = useForm();
 
+  const { showSuccess, showError } = useSnackbar();
+
   const [showPassword, setShowPassword] = React.useState({
     password: false,
     confirmPassword: false,
   });
   const [loading, setLoading] = React.useState(false);
-  const [successMessage, setSuccessMessage] = React.useState("");
-  const [errorMessage, setErrorMessage] = React.useState("");
 
   const handleClickShowPassword = (field) => () => {
     setShowPassword((prev) => ({
@@ -55,11 +54,11 @@ const ResetPassword = ({ onBack }) => {
       const response = await resetPasswordOperation(payload);
 
       if (response?.data?.success === false) {
-        setErrorMessage("Password reset failed.");
+        showError("Password reset failed.");
         return;
       }
 
-      setSuccessMessage("Password reset successful!");
+      showSuccess("Password reset successful!");
       // Clear form fields
       reset();
       // Navigate back to login after 2 seconds
@@ -71,7 +70,7 @@ const ResetPassword = ({ onBack }) => {
         error?.response?.data?.message ||
         error?.message ||
         "Failed to reset password.";
-      setErrorMessage(errMsg);
+      showError(errMsg);
     } finally {
       setLoading(false);
     }
@@ -173,26 +172,6 @@ const ResetPassword = ({ onBack }) => {
           </Button>
         </div>
       </form>
-
-      <Snackbar
-        open={!!successMessage}
-        autoHideDuration={5000}
-        onClose={() => setSuccessMessage("")}
-      >
-        <Alert severity="success" onClose={() => setSuccessMessage("")}>
-          {successMessage}
-        </Alert>
-      </Snackbar>
-
-      <Snackbar
-        open={!!errorMessage}
-        autoHideDuration={5000}
-        onClose={() => setErrorMessage("")}
-      >
-        <Alert severity="error" onClose={() => setErrorMessage("")}>
-          {errorMessage}
-        </Alert>
-      </Snackbar>
     </>
   );
 };

@@ -1,10 +1,13 @@
 import AuthLayout from "./pages/AuthLayout/AuthLayout";
+import { SnackbarProvider } from "./context/SnackbarContext";
 
 function App() {
   return (
-    <div className="App">
-      <AuthLayout />
-    </div>
+    <SnackbarProvider>
+      <div className="App">
+        <AuthLayout />
+      </div>
+    </SnackbarProvider>
   );
 }
 
