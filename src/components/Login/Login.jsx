@@ -16,7 +16,7 @@ import * as classes from "./Login.module.css";
 import { loginOperation } from "../../services/apiHandler";
 import { useSnackbar } from "../../context/SnackbarContext";
 
-const Login = () => {
+const Login = ({ onLoginSuccess }) => {
   const {
     register,
     handleSubmit,
@@ -41,12 +41,12 @@ const Login = () => {
         const { token, name, email, userId } = response.data.data;
         localStorage.setItem("token", token);
         localStorage.setItem("user", JSON.stringify({ name, email, userId }));
-        
+
         // Show success message
         showSuccess("Login successful! Welcome!");
-        
+
         // Call the onLoginSuccess callback
-        // onLoginSuccess();
+        onLoginSuccess();
       } else {
         showError(response?.data?.message || "Login failed");
       }

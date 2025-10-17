@@ -1,4 +1,4 @@
-export const KIONYX_BASE_URL = "http://localhost:7000";
+export const KIONYX_BASE_URL = "http://localhost:9000";
 export const VERSION = "/v1/";
 export const USER = "user/";
 export const LOGIN = "login";

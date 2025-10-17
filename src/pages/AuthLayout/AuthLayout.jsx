@@ -10,6 +10,7 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import * as classes from "./AuthLayout.module.css";
 import KionyxLogo from "../../assets/kionyx_logo.png";
+import { SnackbarProvider } from "../../context/SnackbarContext";
 
 function CustomTabPanel({ children, value, index, ...other }) {
   return (
@@ -52,57 +53,60 @@ const AuthLayout = ({ onLoginSuccess }) => {
   };
 
   return (
-    <div className={classes.background}>
-      <div className={classes.content}>
-        <img src={KionyxLogo} alt="onyx_logo" className={classes.logo} />
-        <Card className={`${classes.card} ${classes.glassmorphism}`}>
-          <CardContent>
-            <Box sx={{ width: "100%" }}>
-              {isResetMode ? (
-                <ResetPassword onBack={() => setIsResetMode(false)} />
-              ) : showForgotPassword ? (
-                <ForgotPassword onBack={onBack} />
-              ) : (
-                <>
-                  <Tabs
-                    value={value}
-                    onChange={handleChange}
-                    aria-label="auth tabs"
-                    centered
-                    textColor="white"
-                  >
-                    <Tab
-                      label="Login"
-                      sx={{ textTransform: "initial", color: "#fff" }}
-                    />
-                    <Tab
-                      label="Sign Up"
-                      sx={{ textTransform: "initial", color: "#fff" }}
-                    />
-                  </Tabs>
-                  <CustomTabPanel value={value} index={0}>
-                    <Login onLoginSuccess={onLoginSuccess} />
-                    <p
-                      style={{
-                        cursor: "pointer",
-                        color: "#fff",
-                        textAlign: "center",
-                      }}
-                      onClick={() => setShowForgotPassword(true)}
+    <SnackbarProvider>
+      <div className={classes.background}>
+        <div className={classes.content}>
+          <img src={KionyxLogo} alt="onyx_logo" className={classes.logo} />
+          <Card className={`${classes.card} ${classes.glassmorphism}`}>
+            <CardContent>
+              <Box sx={{ width: "100%" }}>
+                {isResetMode ? (
+                  <ResetPassword onBack={() => setIsResetMode(false)} />
+                ) : showForgotPassword ? (
+                  <ForgotPassword onBack={onBack} />
+                ) : (
+                  <>
+                    <Tabs
+                      value={value}
+                      onChange={handleChange}
+                      aria-label="auth tabs"
+                      centered
+                      textColor="white"
                     >
-                      Forgot Password?
-                    </p>
-                  </CustomTabPanel>
-                  <CustomTabPanel value={value} index={1}>
-                    <SignUp onSignUpSuccess={handleSignUpSuccess} />
-                  </CustomTabPanel>
-                </>
-              )}
-            </Box>
-          </CardContent>
-        </Card>
+                      <Tab
+                        label="Login"
+                        sx={{ textTransform: "initial", color: "#fff" }}
+                      />
+                      <Tab
+                        label="Sign Up"
+                        sx={{ textTransform: "initial", color: "#fff" }}
+                      />
+                    </Tabs>
+                    <CustomTabPanel value={value} index={0}>
+                      <Login onLoginSuccess={onLoginSuccess} />
+                      <p
+                        style={{
+                          cursor: "pointer",
+                          color: "#fff",
+                          textAlign: "center",
+                          marginTop: "1rem",
+                        }}
+                        onClick={() => setShowForgotPassword(true)}
+                      >
+                        Forgot Password?
+                      </p>
+                    </CustomTabPanel>
+                    <CustomTabPanel value={value} index={1}>
+                      <SignUp onSignUpSuccess={handleSignUpSuccess} />
+                    </CustomTabPanel>
+                  </>
+                )}
+              </Box>
+            </CardContent>
+          </Card>
+        </div>
       </div>
-    </div>
+    </SnackbarProvider>
   );
 };
 

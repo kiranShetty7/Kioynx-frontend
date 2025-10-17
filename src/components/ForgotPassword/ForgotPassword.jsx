@@ -21,13 +21,13 @@ const ForgotPassword = ({ onBack }) => {
     try {
       setLoading(true);
 
-      await forgotPasswordOperation(data);
+      const response = await forgotPasswordOperation(data);
 
-      showSuccess("Password reset link sent to your email.");
+      if (response?.data?.success)
+        showSuccess("Password reset link sent to your email.");
+      else showError(response?.data?.message || "Failed to send reset link.");
     } catch (error) {
-      showError(
-        error?.response?.data?.message || "Failed to send reset link."
-      );
+      showError(error?.response?.data?.message || "Failed to send reset link.");
     } finally {
       setLoading(false);
     }
